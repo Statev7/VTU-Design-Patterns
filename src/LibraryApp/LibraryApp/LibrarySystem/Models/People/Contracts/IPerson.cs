@@ -1,4 +1,4 @@
-﻿namespace LibraryApp.LibrarySystem.Models.Peoples.Contracts
+﻿namespace LibraryApp.LibrarySystem.Models.People.Contracts
 {
     public interface IPerson
     {

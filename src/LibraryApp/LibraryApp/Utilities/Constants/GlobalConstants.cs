@@ -3,8 +3,8 @@
     using System.Collections.Generic;
 
     using LibraryApp.LibrarySystem.Models.Book;
-    using LibraryApp.LibrarySystem.Models.Peoples;
-    using LibraryApp.LibrarySystem.Models.Peoples.Contracts;
+    using LibraryApp.LibrarySystem.Models.People;
+    using LibraryApp.LibrarySystem.Models.People.Contracts;
 
     public static class GlobalConstants
     {

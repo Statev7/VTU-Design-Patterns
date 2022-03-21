@@ -2,7 +2,7 @@
 {
     using LibraryApp.LibrarySystem.Commands.Contracts;
     using LibraryApp.LibrarySystem.Factories;
-    using LibraryApp.LibrarySystem.Models.Peoples.Contracts;
+    using LibraryApp.LibrarySystem.Models.People.Contracts;
     using LibraryApp.Utilities.Messages;
 
     public class RegisterClientCommand : ICommand

@@ -3,7 +3,7 @@
     using System;
     using System.Text;
 
-    using LibraryApp.LibrarySystem.Models.Peoples;
+    using LibraryApp.LibrarySystem.Models.People;
 
     public class Book
     {

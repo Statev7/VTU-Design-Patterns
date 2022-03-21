@@ -5,7 +5,7 @@
     using System.Reflection;
 
     using LibraryApp.LibrarySystem.Infrastructure.Helpers;
-    using LibraryApp.LibrarySystem.Models.Peoples.Contracts;
+    using LibraryApp.LibrarySystem.Models.People.Contracts;
     using LibraryApp.Utilities.Messages;
 
     public class PersonFactory

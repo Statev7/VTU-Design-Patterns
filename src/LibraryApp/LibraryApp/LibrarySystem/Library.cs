@@ -7,8 +7,8 @@
 
     using LibraryApp.LibrarySystem.Infrastructure.Helpers;
     using LibraryApp.LibrarySystem.Models.Book;
-    using LibraryApp.LibrarySystem.Models.Peoples;
-    using LibraryApp.LibrarySystem.Models.Peoples.Contracts;
+    using LibraryApp.LibrarySystem.Models.People;
+    using LibraryApp.LibrarySystem.Models.People.Contracts;
     using LibraryApp.Utilities.Constants;
     using LibraryApp.Utilities.Exceptions;
     using LibraryApp.Utilities.Messages;

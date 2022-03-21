@@ -1,14 +1,14 @@
-﻿namespace LibraryApp.LibrarySystem.Models.Peoples
+﻿namespace LibraryApp.LibrarySystem.Models.People
 {
     using System;
 
     using LibraryApp.Utilities.Messages;
 
-    public class Child : Person
+    public class Adult : Person
     {
-        private const int AGE_MAX_VALUE = 18;
+        public const int MIN_AGE_VALUE = 18;
 
-        public Child(string firstName, string lastName, int age)
+        public Adult(string firstName, string lastName, int age) 
             : base(firstName, lastName, age)
         {
         }
@@ -21,10 +21,10 @@
             }
             protected set
             {
-                bool isInvalid = value >= AGE_MAX_VALUE;
-                if (isInvalid)
+                bool isAgeInvalid = value < MIN_AGE_VALUE;
+                if (isAgeInvalid)
                 {
-                    string errorMessage = string.Format(ExceptionMessages.CHILD_INVALID_AGE, AGE_MAX_VALUE);
+                    string errorMessage = string.Format(ExceptionMessages.ADULT_INVALID_AGE, MIN_AGE_VALUE);
                     throw new ArgumentException(errorMessage);
                 }
 

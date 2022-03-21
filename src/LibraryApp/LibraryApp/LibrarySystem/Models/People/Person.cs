@@ -1,4 +1,4 @@
-﻿namespace LibraryApp.LibrarySystem.Models.Peoples
+﻿namespace LibraryApp.LibrarySystem.Models.People
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
 
     using LibraryApp.LibrarySystem.Infrastructure.Helpers;
     using LibraryApp.LibrarySystem.Models.Book;
-    using LibraryApp.LibrarySystem.Models.Peoples.Contracts;
+    using LibraryApp.LibrarySystem.Models.People.Contracts;
     using LibraryApp.Utilities.Exceptions;
     using LibraryApp.Utilities.Messages;
 

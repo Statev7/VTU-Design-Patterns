@@ -1,4 +1,4 @@
-﻿namespace LibraryApp.LibrarySystem.Models.Peoples
+﻿namespace LibraryApp.LibrarySystem.Models.People
 {
     public class Author : Adult
     {
