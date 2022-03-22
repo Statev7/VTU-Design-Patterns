@@ -15,6 +15,9 @@
 
     public class Library
     {
+        private const char SYMBOL = '-';
+        private const int SYMBOL_COUNT = 20;
+
         private readonly ICollection<Book> books;
         private readonly ICollection<string> bannedGenresForChilds;
         private readonly ICollection<IPerson> people;
@@ -50,8 +53,7 @@
             bool isBannedGenre = person is Child && this.bannedGenresForChilds.Contains(book.Genre);
             if (isBannedGenre)
             {
-                //TODO: Create custom exception!
-                throw new Exception(ExceptionMessages.BANNED_GENRE);
+                throw new AccessDeniedException(ExceptionMessages.BANNED_GENRE);
             }
 
             book.DateOfTake = DateTime.UtcNow;
@@ -83,12 +85,17 @@
         {
             IPerson person = this.FindPersonByFullName(personFullName);
 
-            stringBuilder.Clear();
-            stringBuilder.AppendLine("Books:");
+            this.stringBuilder.Clear();
+
+            string reportMessage = 
+                this.report[person].Count == 0 ? "Books: none" : "Books:";
+
+            this.stringBuilder.AppendLine(reportMessage);
+
             foreach (var book in this.report[person])
             {
-                stringBuilder.AppendLine(book.ToString());
-                stringBuilder.AppendLine(new string('-', 20));
+                this.stringBuilder.AppendLine(book.ToString());
+                this.stringBuilder.AppendLine(new string(SYMBOL, SYMBOL_COUNT));
             }
 
             return stringBuilder.ToString().TrimEnd();
@@ -122,7 +129,7 @@
                     book = person.Value.SingleOrDefault(b => b.Title == bookName);
 
                     string errorMessage = 
-                        string.Format(ExceptionMessages.BOOK_IS_ALREADY_TAKEN, book.Title, book.ReturnDate.ToString("MM/dd/yyyy"));
+                        string.Format(ExceptionMessages.BOOK_IS_ALREADY_TAKEN, book.Title, book.ReturnDate.ToString(GlobalConstants.DATE_FORMAT));
 
                     throw new BookIsAlreadyTaken(errorMessage);
                 }

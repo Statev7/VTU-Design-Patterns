@@ -4,9 +4,12 @@
     using System.Text;
 
     using LibraryApp.LibrarySystem.Models.People;
+    using LibraryApp.Utilities.Constants;
 
     public class Book
     {
+        private const int RENTAL_DAYS = 31;
+
         public Book(string title, Author author, string genre)
         {
             this.Title = title;
@@ -22,7 +25,7 @@
 
         public DateTime DateOfTake { get; set; }
 
-        public DateTime ReturnDate => this.DateOfTake.AddDays(31);
+        public DateTime ReturnDate => this.DateOfTake.AddDays(RENTAL_DAYS);
 
         public override string ToString()
         {
@@ -30,8 +33,8 @@
             sb.AppendLine($"Title: {this.Title}");
             sb.AppendLine($"Author: {this.Author.FirstName}");
             sb.AppendLine($"Genre: {this.Genre}");
-            sb.AppendLine($"Date of take: {this.DateOfTake.ToString("MM/dd/yyyy")}");
-            sb.AppendLine($"Return date: {this.ReturnDate.ToString("MM/dd/yyyy")}");
+            sb.AppendLine($"Date of take: {this.DateOfTake.ToString(GlobalConstants.DATE_FORMAT)}");
+            sb.AppendLine($"Return date: {this.ReturnDate.ToString(GlobalConstants.DATE_FORMAT)}");
 
             return sb.ToString().TrimEnd();
         }

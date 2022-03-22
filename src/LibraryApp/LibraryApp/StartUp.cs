@@ -2,6 +2,7 @@
 {
     using LibraryApp.LibrarySystem.Core;
     using LibraryApp.LibrarySystem.Core.Contracts;
+    using LibraryApp.LibrarySystem.IO.Contracts;
     using LibraryApp.LibrarySystem.IO.Readers;
     using LibraryApp.LibrarySystem.IO.Writers;
 
@@ -9,7 +10,10 @@
     {
         public static void Main()
         {
-            IEngine engine = new Engine(new ConsoleReader(), new ConsoleWriter());
+            IReader reader = new ConsoleReader();
+            IWriter writer = new ConsoleWriter();
+            
+            IEngine engine = new Engine(reader, writer);
             engine.Run();
         }
     }

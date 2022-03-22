@@ -36,5 +36,7 @@
         public static bool IsAppRun = true;
 
         public const string CommandSuffix = "command";
+
+        public const string DATE_FORMAT = "MM/dd/yyyy";
     }
 }
