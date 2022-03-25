@@ -5,15 +5,16 @@
     using System.Reflection;
 
     using LibraryApp.LibrarySystem.Commands.Contracts;
+    using LibraryApp.LibrarySystem.Factories.Contracts;
     using LibraryApp.LibrarySystem.Infrastructure.Helpers;
     using LibraryApp.Utilities.Constants;
     using LibraryApp.Utilities.Messages;
 
-    public class CommandFactory
+    public class CommandFactory : IFactory<ICommand>
     {
-        public ICommand Create(string commandType)
+        public ICommand Create(params string[] arguments)
         {
-            string typeAsString = commandType.ToLower() + GlobalConstants.CommandSuffix;
+            string typeAsString = arguments[0].ToLower() + GlobalConstants.CommandSuffix;
 
             Type type = Assembly.GetCallingAssembly()
                 .GetTypes()

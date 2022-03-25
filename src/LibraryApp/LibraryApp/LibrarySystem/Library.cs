@@ -5,15 +5,16 @@
     using System.Linq;
     using System.Text;
 
+    using LibraryApp.LibrarySystem.Contracts;
     using LibraryApp.LibrarySystem.Infrastructure.Helpers;
-    using LibraryApp.LibrarySystem.Models.Book;
+    using LibraryApp.LibrarySystem.Models.Books;
     using LibraryApp.LibrarySystem.Models.People;
     using LibraryApp.LibrarySystem.Models.People.Contracts;
     using LibraryApp.Utilities.Constants;
     using LibraryApp.Utilities.Exceptions;
     using LibraryApp.Utilities.Messages;
 
-    public class Library
+    public class Library : ILibrary
     {
         private const char SYMBOL = '-';
         private const int SYMBOL_COUNT = 20;

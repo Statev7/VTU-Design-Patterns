@@ -3,10 +3,11 @@
     using System;
 
     using LibraryApp.LibrarySystem.Commands.Contracts;
+    using LibraryApp.LibrarySystem.Contracts;
 
     public class ReportCommand : ICommand
     {
-        public string Execute(Library library, params string[] arguments)
+        public string Execute(ILibrary library, params string[] arguments)
         {
             string personFullName = string.Join(' ', arguments);
             string report = library.ShowReportForPerson(personFullName);

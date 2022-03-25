@@ -1,7 +1,9 @@
 ﻿namespace LibraryApp.LibrarySystem.Commands.Contracts
 {
+    using LibraryApp.LibrarySystem.Contracts;
+
     public interface ICommand
     {
-        string Execute(Library library, params string[] arguments);
+        string Execute(ILibrary library, params string[] arguments);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace LibraryApp.LibrarySystem.Models.Book
+﻿namespace LibraryApp.LibrarySystem.Models.Books
 {
     using System;
     using System.Text;

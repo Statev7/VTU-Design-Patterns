@@ -4,11 +4,12 @@
     using System.Linq;
     using System.Reflection;
 
+    using LibraryApp.LibrarySystem.Factories.Contracts;
     using LibraryApp.LibrarySystem.Infrastructure.Helpers;
     using LibraryApp.LibrarySystem.Models.People.Contracts;
     using LibraryApp.Utilities.Messages;
 
-    public class PersonFactory
+    public class PersonFactory : IFactory<IPerson>
     {
         private const int EXPECTED_ARGUMENT_COUNT = 4;
 

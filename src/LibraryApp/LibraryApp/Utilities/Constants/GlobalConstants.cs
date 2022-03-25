@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using LibraryApp.LibrarySystem.Models.Book;
+    using LibraryApp.LibrarySystem.Models.Books;
     using LibraryApp.LibrarySystem.Models.People;
     using LibraryApp.LibrarySystem.Models.People.Contracts;
 

@@ -4,14 +4,16 @@
     using System.Linq;
 
     using LibraryApp.LibrarySystem.Commands.Contracts;
+    using LibraryApp.LibrarySystem.Contracts;
     using LibraryApp.LibrarySystem.Factories;
+    using LibraryApp.LibrarySystem.Factories.Contracts;
 
     public class CommandInterpreter
     {
-        private readonly CommandFactory commandFactory;
-        private readonly Library library;
+        private readonly IFactory<ICommand> commandFactory;
+        private readonly ILibrary library;
 
-        public CommandInterpreter(Library library)
+        public CommandInterpreter(ILibrary library)
         {
             this.commandFactory = new CommandFactory();
             this.library = library;

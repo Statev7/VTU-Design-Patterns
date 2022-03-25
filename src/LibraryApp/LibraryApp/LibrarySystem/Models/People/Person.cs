@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using LibraryApp.LibrarySystem.Contracts;
     using LibraryApp.LibrarySystem.Infrastructure.Helpers;
-    using LibraryApp.LibrarySystem.Models.Book;
+    using LibraryApp.LibrarySystem.Models.Books;
     using LibraryApp.LibrarySystem.Models.People.Contracts;
     using LibraryApp.Utilities.Exceptions;
     using LibraryApp.Utilities.Messages;
@@ -81,7 +82,7 @@
 
         public string FullName => $"{this.FirstName} {this.LastName}";
 
-        public Library Library { get; set; }
+        public ILibrary Library { get; set; }
 
         public void GetBook(string bookName)
         {
