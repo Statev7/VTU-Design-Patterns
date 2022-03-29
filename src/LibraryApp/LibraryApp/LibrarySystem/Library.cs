@@ -34,7 +34,7 @@
             this.report = new Dictionary<IPerson, List<Book>>();
         }
 
-        public void RegisterClient(IPerson person)
+        public string RegisterClient(IPerson person)
         {
             bool isPersonAlredyExist = this.people.Any(p => p.FullName == person.FullName);
             if (isPersonAlredyExist)
@@ -45,6 +45,9 @@
 
             this.people.Add(person);
             person.Library = this;
+
+            string message = string.Format(OutputMessages.SUCCESFFULY_REGISTRATION, person.FullName);
+            return message;
         }
 
         public Book GetBook(IPerson person, string bookName)

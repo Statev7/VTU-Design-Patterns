@@ -5,7 +5,6 @@
     using LibraryApp.LibrarySystem.Factories;
     using LibraryApp.LibrarySystem.Factories.Contracts;
     using LibraryApp.LibrarySystem.Models.People.Contracts;
-    using LibraryApp.Utilities.Messages;
 
     public class RegisterClientCommand : ICommand
     {
@@ -20,8 +19,8 @@
         {
             IPerson clien = this.personFactory.Create(arguments);
 
-            library.RegisterClient(clien);
-            return OutputMessages.SUCCESFFULY_REGISTRATION;    
+            string message = library.RegisterClient(clien);
+            return message;    
         }
     }
 }

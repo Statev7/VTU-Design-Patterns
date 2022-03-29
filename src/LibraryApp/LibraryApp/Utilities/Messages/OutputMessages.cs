@@ -2,7 +2,7 @@
 {
     public static class OutputMessages
     {
-        public const string SUCCESFFULY_REGISTRATION = "Successfully registered client!";
+        public const string SUCCESFFULY_REGISTRATION = "Successfully registered {0}!";
 
         public const string SUCCESSFULLY_RETURNED_BOOK = "The {0} book is back.";
 

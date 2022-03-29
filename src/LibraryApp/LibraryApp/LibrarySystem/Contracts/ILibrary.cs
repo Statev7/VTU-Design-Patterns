@@ -5,7 +5,7 @@
 
     public interface ILibrary
     {
-        void RegisterClient(IPerson person);
+        string RegisterClient(IPerson person);
 
         Book GetBook(IPerson person, string bookName);
 
