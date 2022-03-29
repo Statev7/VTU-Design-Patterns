@@ -21,7 +21,7 @@
 
         public static bool IsBelowOrEqualToZero(double value)
         {
-            return value < 0;
+            return value <= 0;
         }
     }
 }

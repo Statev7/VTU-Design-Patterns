@@ -8,7 +8,7 @@
 
     public class Book
     {
-        private const int RENTAL_DAYS = 31;
+        private DateTime dateOfTake;
 
         public Book(string title, Author author, string genre)
         {
@@ -23,9 +23,19 @@
 
         public string Genre { get; private set; }
 
-        public DateTime DateOfTake { get; set; }
+        public DateTime DateOfTake
+        {
+            get => this.dateOfTake;
+            set
+            {
+                this.dateOfTake = value;
+                OnTimeChanged?.Invoke(this, this.dateOfTake);
+            }
+        }
 
-        public DateTime ReturnDate => this.DateOfTake.AddDays(RENTAL_DAYS);
+        public DateTime ReturnDate { get; set; }
+
+        public event EventHandler<DateTime> OnTimeChanged;
 
         public override string ToString()
         {

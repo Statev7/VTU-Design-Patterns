@@ -18,12 +18,13 @@
     {
         private const char SYMBOL = '-';
         private const int SYMBOL_COUNT = 20;
+        private const int RENTAL_DAYS = 31;
+        private const int NOTICE_DAYS = 5;
 
         private readonly ICollection<Book> books;
         private readonly ICollection<string> bannedGenresForChilds;
         private readonly ICollection<IPerson> people;
         private readonly IDictionary<IPerson, List<Book>> report;
-        private readonly StringBuilder stringBuilder;
 
         public Library()
         {
@@ -31,7 +32,6 @@
             this.bannedGenresForChilds = GlobalConstants.BannedGenreForChilds;
             this.people = new HashSet<IPerson>();
             this.report = new Dictionary<IPerson, List<Book>>();
-            this.stringBuilder = new StringBuilder();
         }
 
         public void RegisterClient(IPerson person)
@@ -58,12 +58,18 @@
             }
 
             book.DateOfTake = DateTime.UtcNow;
+            DateTime returnDate = book.DateOfTake.AddDays(RENTAL_DAYS);
+            book.ReturnDate = returnDate;
+            book.OnTimeChanged += BookOnTimeChanged;
+
             if (!this.report.ContainsKey(person))
             {
                 this.report.Add(person, new List<Book> { });
             }
             this.report[person].Add(book);
             this.books.Remove(book);
+
+            //book.DateOfTake = DateTime.UtcNow.AddDays(25);
 
             return book;
         }
@@ -84,19 +90,18 @@
 
         public string ShowReportForPerson(string personFullName)
         {
-            IPerson person = this.FindPersonByFullName(personFullName);
+            StringBuilder stringBuilder = new StringBuilder();
 
-            this.stringBuilder.Clear();
+            IPerson person = this.FindPersonByFullName(personFullName);
 
             string reportMessage = 
                 this.report[person].Count == 0 ? "Books: none" : "Books:";
 
-            this.stringBuilder.AppendLine(reportMessage);
-
+            stringBuilder.AppendLine(reportMessage);
             foreach (var book in this.report[person])
             {
-                this.stringBuilder.AppendLine(book.ToString());
-                this.stringBuilder.AppendLine(new string(SYMBOL, SYMBOL_COUNT));
+                stringBuilder.AppendLine(book.ToString());
+                stringBuilder.AppendLine(new string(SYMBOL, SYMBOL_COUNT));
             }
 
             return stringBuilder.ToString().TrimEnd();
@@ -130,7 +135,9 @@
                     book = person.Value.SingleOrDefault(b => b.Title == bookName);
 
                     string errorMessage = 
-                        string.Format(ExceptionMessages.BOOK_IS_ALREADY_TAKEN, book.Title, book.ReturnDate.ToString(GlobalConstants.DATE_FORMAT));
+                        string.Format(ExceptionMessages.BOOK_IS_ALREADY_TAKEN, 
+                        book.Title, 
+                        book.ReturnDate.ToString(GlobalConstants.DATE_FORMAT));
 
                     throw new BookIsAlreadyTaken(errorMessage);
                 }
@@ -146,6 +153,30 @@
             }
 
             return book;
+        }
+
+        private void BookOnTimeChanged(object sender, DateTime e)
+        {
+            Book book = sender as Book;
+            TimeSpan result = book.ReturnDate - book.DateOfTake;
+
+            IPerson personToNotify = null;
+            foreach (var person in this.report)
+            {
+                bool isValid = person.Value.Contains(book);
+                if (isValid)
+                {
+                    personToNotify = person.Key;
+                    break;
+                }
+            }
+
+            if (result.Days <= NOTICE_DAYS)
+            {
+                string message = 
+                    string.Format(OutputMessages.NOTIFY_TO_RETURN_BOOK, personToNotify.FullName, book.Title, result.Days);
+                Console.WriteLine(message);
+            }
         }
     }
 }
