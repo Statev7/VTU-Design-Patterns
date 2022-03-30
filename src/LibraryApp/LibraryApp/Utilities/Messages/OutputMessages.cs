@@ -8,6 +8,6 @@
 
         public const string SUCCESSFULY_TAKEN_BOOK = "{0} took {1}.";
 
-        public const string NOTIFY_TO_RETURN_BOOK = "{0} must return the {1} book within {2} days!";
+        public const string NOTIFY_TO_RETURN_BOOK = "The {0} book must be returned wuthub {1} days!";
     }
 }

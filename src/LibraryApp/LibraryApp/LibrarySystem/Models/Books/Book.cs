@@ -2,13 +2,17 @@
 {
     using System;
     using System.Text;
+    using System.Timers;
 
     using LibraryApp.LibrarySystem.Models.People;
     using LibraryApp.Utilities.Constants;
+    using LibraryApp.Utilities.Messages;
 
     public class Book
     {
-        private DateTime dateOfTake;
+        private const int NOTICE_DAYS = 5;
+        private const int TIMER_DALAY = 86400000;
+        private Timer timer;
 
         public Book(string title, Author author, string genre)
         {
@@ -23,19 +27,29 @@
 
         public string Genre { get; private set; }
 
-        public DateTime DateOfTake
-        {
-            get => this.dateOfTake;
-            set
-            {
-                this.dateOfTake = value;
-                OnTimeChanged?.Invoke(this, this.dateOfTake);
-            }
-        }
+        public DateTime DateOfTake { get; set; }
 
         public DateTime ReturnDate { get; set; }
 
-        public event EventHandler<DateTime> OnTimeChanged;
+        public void SetTimer()
+        {
+            this.timer = new Timer(TIMER_DALAY);
+            this.timer.Elapsed += OnTimedEvent;
+            this.timer.AutoReset = true;
+            this.timer.Enabled = true;
+        }
+
+        private  void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            TimeSpan result = this.ReturnDate - this.DateOfTake;
+
+            if (result.Days <= NOTICE_DAYS)
+            {
+                string message =
+                    string.Format(OutputMessages.NOTIFY_TO_RETURN_BOOK, this.Title, result.Days);
+                Console.WriteLine(message);
+            }
+        }
 
         public override string ToString()
         {

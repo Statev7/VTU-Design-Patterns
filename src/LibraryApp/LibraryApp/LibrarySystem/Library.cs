@@ -19,7 +19,6 @@
         private const char SYMBOL = '-';
         private const int SYMBOL_COUNT = 20;
         private const int RENTAL_DAYS = 31;
-        private const int NOTICE_DAYS = 5;
 
         private readonly ICollection<Book> books;
         private readonly ICollection<string> bannedGenresForChilds;
@@ -63,16 +62,16 @@
             book.DateOfTake = DateTime.UtcNow;
             DateTime returnDate = book.DateOfTake.AddDays(RENTAL_DAYS);
             book.ReturnDate = returnDate;
-            book.OnTimeChanged += BookOnTimeChanged;
+
+            book.SetTimer();
 
             if (!this.report.ContainsKey(person))
             {
                 this.report.Add(person, new List<Book> { });
             }
+
             this.report[person].Add(book);
             this.books.Remove(book);
-
-            //book.DateOfTake = DateTime.UtcNow.AddDays(25);
 
             return book;
         }
@@ -156,30 +155,6 @@
             }
 
             return book;
-        }
-
-        private void BookOnTimeChanged(object sender, DateTime e)
-        {
-            Book book = sender as Book;
-            TimeSpan result = book.ReturnDate - book.DateOfTake;
-
-            IPerson personToNotify = null;
-            foreach (var person in this.report)
-            {
-                bool isValid = person.Value.Contains(book);
-                if (isValid)
-                {
-                    personToNotify = person.Key;
-                    break;
-                }
-            }
-
-            if (result.Days <= NOTICE_DAYS)
-            {
-                string message = 
-                    string.Format(OutputMessages.NOTIFY_TO_RETURN_BOOK, personToNotify.FullName, book.Title, result.Days);
-                Console.WriteLine(message);
-            }
         }
     }
 }
