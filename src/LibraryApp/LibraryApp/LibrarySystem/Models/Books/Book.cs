@@ -19,6 +19,7 @@
             this.Title = title;
             this.Author = author;
             this.Genre = genre;
+            this.IsReturned = true;
         }
 
         public string Title { get; private set; }
@@ -26,6 +27,8 @@
         public Author Author { get; private set; }
 
         public string Genre { get; private set; }
+
+        public bool IsReturned { get; set; }
 
         public DateTime DateOfTake { get; set; }
 
@@ -41,13 +44,16 @@
 
         private  void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            TimeSpan result = this.ReturnDate - this.DateOfTake;
-
-            if (result.Days <= NOTICE_DAYS)
+            if (this.IsReturned == false)
             {
-                string message =
-                    string.Format(OutputMessages.NOTIFY_TO_RETURN_BOOK, this.Title, result.Days);
-                Console.WriteLine(message);
+                TimeSpan result = this.ReturnDate - this.DateOfTake;
+
+                if (result.Days <= NOTICE_DAYS)
+                {
+                    string message =
+                        string.Format(OutputMessages.NOTIFY_TO_RETURN_BOOK, this.Title, result.Days);
+                    Console.WriteLine(message);
+                }
             }
         }
 

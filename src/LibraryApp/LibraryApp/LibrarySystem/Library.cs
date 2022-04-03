@@ -62,6 +62,7 @@
             book.DateOfTake = DateTime.UtcNow;
             DateTime returnDate = book.DateOfTake.AddDays(RENTAL_DAYS);
             book.ReturnDate = returnDate;
+            book.IsReturned = false;
 
             book.SetTimer();
 
@@ -85,6 +86,7 @@
             }
 
             book.DateOfTake = default;
+            book.IsReturned = true;
 
             this.report[person].Remove(book);
             this.books.Add(book);
