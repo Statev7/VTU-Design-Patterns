@@ -13,8 +13,8 @@
 
 ## Команди
 * RegisterClient {userType} {fName} {lName} {age}
-* GetBook {userFName} {userLName} {bookName}
-* ReturnBook {userFName} {userLName} {bookName}
+* GetItem {userFName} {userLName} {itemName}
+* ReturnItem {userFName} {userLName} {itemName}
 * Report {userFName} {userLName}
 * ShutDown
 
