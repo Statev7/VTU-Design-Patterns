@@ -1,4 +1,4 @@
-﻿namespace LibraryApp.LibrarySystem.Models.Books
+﻿namespace LibraryApp.LibrarySystem.Models.LibraryItems
 {
     using System;
     using System.Text;
@@ -8,13 +8,15 @@
     using LibraryApp.Utilities.Constants;
     using LibraryApp.Utilities.Messages;
 
-    public class Book
+    public abstract class LibraryItem
     {
         private const int NOTICE_DAYS = 5;
-        private const int TIMER_DALAY = 86400000;
+        private const int TIMER_DALAY = 86400000; // 1 Day
+        //private const int TIMER_DALAY = 3000;
+
         private Timer timer;
 
-        public Book(string title, Author author, string genre)
+        protected LibraryItem(string title, Author author, string genre)
         {
             this.Title = title;
             this.Author = author;
@@ -42,7 +44,7 @@
             this.timer.Enabled = true;
         }
 
-        private  void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             if (this.IsReturned == false)
             {
@@ -51,7 +53,7 @@
                 if (result.Days <= NOTICE_DAYS)
                 {
                     string message =
-                        string.Format(OutputMessages.NOTIFY_TO_RETURN_BOOK, this.Title, result.Days);
+                        string.Format(OutputMessages.NOTIFY_TO_RETURN_ITEM, this.Title, result.Days);
                     Console.WriteLine(message);
                 }
             }
@@ -60,6 +62,7 @@
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"Item type: {this.GetType().Name}");
             sb.AppendLine($"Title: {this.Title}");
             sb.AppendLine($"Author: {this.Author.FirstName}");
             sb.AppendLine($"Genre: {this.Genre}");
