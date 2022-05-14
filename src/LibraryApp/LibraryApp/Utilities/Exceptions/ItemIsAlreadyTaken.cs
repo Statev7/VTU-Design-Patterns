@@ -2,15 +2,15 @@
 {
     using System;
 
-    public class BookIsAlreadyTaken : Exception
+    public class ItemIsAlreadyTaken : Exception
     {
-        public BookIsAlreadyTaken()
+        public ItemIsAlreadyTaken()
             :base()
         {
 
         }
 
-        public BookIsAlreadyTaken(string errorMessage)
+        public ItemIsAlreadyTaken(string errorMessage)
             :base(errorMessage)
         {
 

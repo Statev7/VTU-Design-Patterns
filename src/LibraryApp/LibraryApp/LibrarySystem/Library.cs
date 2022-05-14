@@ -7,7 +7,7 @@
 
     using LibraryApp.LibrarySystem.Contracts;
     using LibraryApp.LibrarySystem.Infrastructure.Helpers;
-    using LibraryApp.LibrarySystem.Models.Books;
+    using LibraryApp.LibrarySystem.Models.LibraryItems;
     using LibraryApp.LibrarySystem.Models.People;
     using LibraryApp.LibrarySystem.Models.People.Contracts;
     using LibraryApp.Utilities.Constants;
@@ -19,18 +19,19 @@
         private const char SYMBOL = '-';
         private const int SYMBOL_COUNT = 20;
         private const int RENTAL_DAYS = 31;
+        //private const int RENTAL_DAYS = 1;
 
-        private readonly ICollection<Book> books;
+        private readonly ICollection<LibraryItem> items;
         private readonly ICollection<string> bannedGenresForChilds;
         private readonly ICollection<IPerson> people;
-        private readonly IDictionary<IPerson, List<Book>> report;
+        private readonly IDictionary<IPerson, List<LibraryItem>> report;
 
         public Library()
         {
-            this.books = GlobalConstants.Books;
+            this.items = GlobalConstants.Books;
             this.bannedGenresForChilds = GlobalConstants.BannedGenreForChilds;
             this.people = new HashSet<IPerson>();
-            this.report = new Dictionary<IPerson, List<Book>>();
+            this.report = new Dictionary<IPerson, List<LibraryItem>>();
         }
 
         public string RegisterClient(IPerson person)
@@ -43,53 +44,52 @@
             }
 
             this.people.Add(person);
+            this.report.Add(person, new List<LibraryItem> { });
             person.Library = this;
 
             string message = string.Format(OutputMessages.SUCCESFFULY_REGISTRATION, person.FullName);
+
             return message;
         }
 
-        public Book GetBook(IPerson person, string bookName)
+        public LibraryItem GetItem(IPerson person, string itemName)
         {
-            Book book = this.FindBookByName(bookName);
+            LibraryItem libraryItem = this.FindItemByName(itemName);
 
-            bool isBannedGenre = person is Child && this.bannedGenresForChilds.Contains(book.Genre);
+            bool isBannedGenre = person is Child && this.bannedGenresForChilds.Contains(libraryItem.Genre);
             if (isBannedGenre)
             {
-                throw new AccessDeniedException(ExceptionMessages.BANNED_GENRE);
+                string message = 
+                    string.Format(ExceptionMessages.BANNED_GENRE, libraryItem.Genre);
+                throw new AccessDeniedException(message);
             }
 
-            book.DateOfTake = DateTime.UtcNow;
-            DateTime returnDate = book.DateOfTake.AddDays(RENTAL_DAYS);
-            book.ReturnDate = returnDate;
-            book.IsReturned = false;
+            libraryItem.DateOfTake = DateTime.UtcNow;
+            DateTime returnDate = libraryItem.DateOfTake.AddDays(RENTAL_DAYS);
+            libraryItem.ReturnDate = returnDate;
+            libraryItem.IsReturned = false;
 
-            book.SetTimer();
+            libraryItem.SetTimer();
 
-            if (!this.report.ContainsKey(person))
-            {
-                this.report.Add(person, new List<Book> { });
-            }
+            this.report[person].Add(libraryItem);
+            this.items.Remove(libraryItem);
 
-            this.report[person].Add(book);
-            this.books.Remove(book);
-
-            return book;
+            return libraryItem;
         }
 
-        public void ReturnBook(IPerson person, Book book)
+        public void ReturnItem(IPerson person, LibraryItem item)
         {
-            bool isValid = this.report[person].Contains(book);
+            bool isValid = this.report[person].Contains(item);
             if (isValid == false)
             {
-                throw new ArgumentException(ExceptionMessages.INVALID_BOOK_TO_RETURN);
+                throw new ArgumentException(ExceptionMessages.INVALID_ITEM_TO_RETURN);
             }
 
-            book.DateOfTake = default;
-            book.IsReturned = true;
+            item.DateOfTake = default;
+            item.IsReturned = true;
 
-            this.report[person].Remove(book);
-            this.books.Add(book);
+            this.report[person].Remove(item);
+            this.items.Add(item);
         }
 
         public string ShowReportForPerson(string personFullName)
@@ -99,12 +99,12 @@
             IPerson person = this.FindPersonByFullName(personFullName);
 
             string reportMessage = 
-                this.report[person].Count == 0 ? "Books: none" : "Books:";
+                this.report[person].Count == 0 ? "Items to return: none" : "Items to return:";
 
             stringBuilder.AppendLine(reportMessage);
-            foreach (var book in this.report[person])
+            foreach (var item in this.report[person].OrderBy(x => x.GetType().Name))
             {
-                stringBuilder.AppendLine(book.ToString());
+                stringBuilder.AppendLine(item.ToString());
                 stringBuilder.AppendLine(new string(SYMBOL, SYMBOL_COUNT));
             }
 
@@ -126,37 +126,37 @@
             return person;
         }
 
-        private Book FindBookByName(string bookName)
+        private LibraryItem FindItemByName(string itemName)
         {
-            Book book = null;
+            LibraryItem item = null;
 
-            bool isBookTaken = false;
+            bool isItemTaken = false;
             foreach (var person in this.report)
             {
-                isBookTaken = person.Value.Any(b => b.Title == bookName);
-                if (isBookTaken)
+                isItemTaken = person.Value.Any(li => li.Title == itemName);
+                if (isItemTaken)
                 {
-                    book = person.Value.SingleOrDefault(b => b.Title == bookName);
+                    item = person.Value.SingleOrDefault(li => li.Title == itemName);
 
                     string errorMessage = 
-                        string.Format(ExceptionMessages.BOOK_IS_ALREADY_TAKEN, 
-                        book.Title, 
-                        book.ReturnDate.ToString(GlobalConstants.DATE_FORMAT));
+                        string.Format(ExceptionMessages.ITEM_IS_ALREADY_TAKEN, 
+                        item.Title, 
+                        item.ReturnDate.ToString(GlobalConstants.DATE_FORMAT));
 
-                    throw new BookIsAlreadyTaken(errorMessage);
+                    throw new ItemIsAlreadyTaken(errorMessage);
                 }
             }
 
-            book = this.books
-                .SingleOrDefault(b => b.Title.ToLower() == bookName.ToLower());
+            item = this.items
+                .SingleOrDefault(b => b.Title.ToLower() == itemName.ToLower());
 
-            bool isNull = CustomValidator.IsNull(book);
+            bool isNull = CustomValidator.IsNull(item);
             if (isNull)
             {
-                throw new EntityDoesNotExist(ExceptionMessages.INVALID_BOOK);
+                throw new EntityDoesNotExist(ExceptionMessages.INVALID_ITEM);
             }
 
-            return book;
+            return item;
         }
     }
 }

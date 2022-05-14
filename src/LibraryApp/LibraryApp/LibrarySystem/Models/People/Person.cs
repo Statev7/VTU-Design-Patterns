@@ -6,7 +6,7 @@
 
     using LibraryApp.LibrarySystem.Contracts;
     using LibraryApp.LibrarySystem.Infrastructure.Helpers;
-    using LibraryApp.LibrarySystem.Models.Books;
+    using LibraryApp.LibrarySystem.Models.LibraryItems;
     using LibraryApp.LibrarySystem.Models.People.Contracts;
     using LibraryApp.Utilities.Exceptions;
     using LibraryApp.Utilities.Messages;
@@ -19,11 +19,11 @@
         private string firstName;
         private string lastName;
         private int age;
-        private readonly ICollection<Book> books;
+        private readonly ICollection<LibraryItem> libraryItems;
 
         private Person()
         {
-            this.books = new List<Book>();
+            this.libraryItems = new List<LibraryItem>();
         }
 
         protected Person(string firstName, string lastName, int age)
@@ -84,29 +84,29 @@
 
         public ILibrary Library { get; set; }
 
-        public void GetBook(string bookName)
+        public void GetLibraryItem(string libraryItemName)
         {
-            Book book = this.Library.GetBook(this, bookName);
-            this.books.Add(book);
+            LibraryItem libraryItem = this.Library.GetItem(this, libraryItemName);
+            this.libraryItems.Add(libraryItem);
         }
 
-        public void ReturnBook(string bookName)
+        public void ReturnLibraryItem(string libraryItemName)
         {
-            Book book = this.FindBookByName(bookName);
+            LibraryItem libraryItem = this.FindLibraryItemByName(libraryItemName);
 
-            bool isNull = CustomValidator.IsNull(book);
+            bool isNull = CustomValidator.IsNull(libraryItem);
             if (isNull)
             {
-                throw new EntityDoesNotExist(ExceptionMessages.INVALID_BOOK_TO_RETURN);
+                throw new EntityDoesNotExist(ExceptionMessages.INVALID_ITEM_TO_RETURN);
             }
 
-            this.books.Remove(book);
-            this.Library.ReturnBook(this, book);
+            this.libraryItems.Remove(libraryItem);
+            this.Library.ReturnItem(this, libraryItem);
         }
 
-        private Book FindBookByName(string bookName)
+        private LibraryItem FindLibraryItemByName(string libraryItemName)
         {
-            return this.books.SingleOrDefault(b => b.Title == bookName);
+            return this.libraryItems.SingleOrDefault(li => li.Title == libraryItemName);
         }
 
         private void ValidateName(string nameValue, int minLenght, string nameOf)
@@ -115,7 +115,7 @@
             if (isNullOrWhiteSpace)
             {
                 string errorMessage = string.Format(ExceptionMessages.NULL_OR_WHITESPACE_NAME, nameOf);
-                throw new ArgumentNullException(errorMessage);
+                throw new ArgumentNullException(null, errorMessage);
             }
 
             bool isNameLenghtInvalid = CustomValidator.IsStringLengthLowerTo(nameValue, minLenght);

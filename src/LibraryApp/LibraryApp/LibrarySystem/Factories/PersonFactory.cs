@@ -45,7 +45,7 @@
             if (isNull)
             {
                 string errorMessage = string.Format(ExceptionMessages.INVALID_TYPE, typeAsString);
-                throw new ArgumentNullException(errorMessage);
+                throw new ArgumentNullException(null, errorMessage);
             }
 
             object[] arg = new object[] { firstName, lastName, age };

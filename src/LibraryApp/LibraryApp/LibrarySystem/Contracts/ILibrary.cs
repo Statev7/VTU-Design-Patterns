@@ -1,15 +1,15 @@
 ﻿namespace LibraryApp.LibrarySystem.Contracts
 {
-    using LibraryApp.LibrarySystem.Models.Books;
+    using LibraryApp.LibrarySystem.Models.LibraryItems;
     using LibraryApp.LibrarySystem.Models.People.Contracts;
 
     public interface ILibrary
     {
         string RegisterClient(IPerson person);
 
-        Book GetBook(IPerson person, string bookName);
+        LibraryItem GetItem(IPerson person, string bookName);
 
-        void ReturnBook(IPerson person, Book book);
+        void ReturnItem(IPerson person, LibraryItem book);
 
         string ShowReportForPerson(string personFullName);
 

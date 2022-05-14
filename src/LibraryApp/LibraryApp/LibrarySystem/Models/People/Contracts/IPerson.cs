@@ -14,8 +14,8 @@
 
         public ILibrary Library { get; set; }
 
-        void GetBook(string bookName);
+        void GetLibraryItem(string bookName);
 
-        void ReturnBook(string bookName);
+        void ReturnLibraryItem(string bookName);
     }
 }
